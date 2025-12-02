@@ -23,6 +23,7 @@ uci set dropbear.@dropbear[0].Interface='wan'
 uci set dropbear.@dropbear[0].Port='22'
 uci commit dropbear
 /etc/init.d/dropbear restart
+say "SSH done."
 
 check_interface() { ip link show "$1" >/dev/null 2>&1; }
 have_bin() { command -v "$1" >/dev/null 2>&1; }
@@ -99,6 +100,8 @@ uci set pptpd.client.password="${VPN_PASS}"
 uci commit pptpd
 service pptpd restart
 
+say "PPTP done."
+
 say "=== Config homeproxy ==="
 uci set homeproxy.control.bind_interface='eth0'
 uci add_list homeproxy.control.listen_interfaces='br-lan'
@@ -108,6 +111,7 @@ uci set homeproxy.config.dns_server='1.1.1.2'
 uci set homeproxy.config.routing_mode='global'
 uci set homeproxy.config.proxy_mode='redirect_tproxy'
 uci set homeproxy.config.ipv6_support='1'
+uci delete homeproxy.config.routing_port
 
 uci set network.proxy='interface'
 uci set network.proxy.proto='none'
@@ -157,6 +161,8 @@ uci commit firewall
 service homeproxy restart
 service network restart
 /etc/init.d/firewall reload
+
+say "Homeproxy done."
 
 # ---------- Final information ----------
 say "=== SETUP COMPLETED ==="
