@@ -160,3 +160,4 @@ service network restart
 
 # ---------- Final information ----------
 say "=== SETUP COMPLETED ==="
+passwd
