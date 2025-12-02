@@ -128,8 +128,7 @@ uci set firewall.@zone[-1].masq='1'
 
 # Add LAN -> proxy forwarding
 uci add firewall forwarding
-uci set firewall.@forwarding[-1].src='lan'
-uci set firewall.@forwarding[-1].dest='proxy'
+uci set firewall.@forwarding[0].dest='proxy'
 
 # LAN zone
 uci set firewall.lan='zone'
