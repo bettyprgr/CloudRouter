@@ -103,8 +103,60 @@ say "=== Config homeproxy ==="
 uci set homeproxy.control.bind_interface='eth0'
 uci add_list homeproxy.control.listen_interfaces='br-lan'
 uci add_list homeproxy.control.listen_interfaces='ppp0'
+uci set homeproxy.config.main_udp_node='same'
+uci set homeproxy.config.dns_server='1.1.1.2'
+uci set homeproxy.config.routing_mode='global'
+uci set homeproxy.config.proxy_mode='redirect_tproxy'
+uci set homeproxy.config.ipv6_support='1'
+
+uci set network.proxy='interface'
+uci set network.proxy.proto='none'
+uci set network.proxy.device='singtun0'
+
+# Add firewall zone "proxy"
+uci add firewall zone
+uci set firewall.@zone[-1].name='proxy'
+uci set firewall.@zone[-1].input='REJECT'
+uci set firewall.@zone[-1].output='ACCEPT'
+uci set firewall.@zone[-1].forward='REJECT'
+uci set firewall.@zone[-1].network='proxy'
+uci set firewall.@zone[-1].masq='1'
+
+# Add LAN -> proxy forwarding
+uci add firewall forwarding
+uci set firewall.@forwarding[-1].src='lan'
+uci set firewall.@forwarding[-1].dest='proxy'
+
+# LAN zone
+uci set firewall.lan='zone'
+uci set firewall.lan.name='lan'
+uci set firewall.lan.input='ACCEPT'
+uci set firewall.lan.output='ACCEPT'
+uci set firewall.lan.forward='REJECT'
+uci set firewall.lan.device='ppp+'
+uci set firewall.lan.network='lan'
+
+# WAN zone
+uci set firewall.wan='zone'
+uci set firewall.wan.name='wan'
+uci set firewall.wan.input='REJECT'
+uci set firewall.wan.output='ACCEPT'
+uci set firewall.wan.forward='REJECT'
+uci set firewall.wan.masq='1'
+uci set firewall.wan.mtu_fix='1'
+
+# network is a list: 'wan' 'wan6'
+uci delete firewall.wan.network 2>/dev/null
+uci add_list firewall.wan.network='wan'
+uci add_list firewall.wan.network='wan6'
+
+# Save & reload
+uci commit network
 uci commit homeproxy
+uci commit firewall
 service homeproxy restart
+service network restart
+/etc/init.d/firewall reload
 
 # ---------- Final information ----------
 say "=== SETUP COMPLETED ==="
