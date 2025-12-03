@@ -69,6 +69,15 @@ VPN_POOL="192.168.9.128-254"
 VPN_USER="betty"
 VPN_PASS="prgrno1"
 
+cat << 'EOF' > /etc/ppp/options
+idle 0
+maxconnect 0
+lcp-echo-interval 20
+lcp-echo-failure 5
+mtu 1400
+mru 1400
+EOF
+
 cat << EOF >> /etc/sysctl.conf
 net.netfilter.nf_conntrack_helper=1
 EOF
