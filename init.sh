@@ -55,7 +55,34 @@ opkg update || warn "opkg update: errors occurred (continuing)"
 install_pkg() {
   local p="$1"
   say "Installing: $p"
-  opkg install -V1 "$p" >/dev/null 2>&1 || warn "Failed to install $p (continuing)"
+  while true; do
+    if opkg install -V1 "$p" >/dev/null 2>&1; then
+      break
+    fi
+
+    err "Failed to install $p."
+    while true; do
+      printf "Retry installation of %s? [r=retry/s=stop]: " "$p"
+      if ! read ans; then
+        err "Input not received. Exiting."
+        exit 1
+      fi
+
+      case "$ans" in
+        r|R)
+          say "Retrying: $p"
+          break
+          ;;
+        s|S)
+          err "Stopping script due to installation failure for $p."
+          exit 1
+          ;;
+        *)
+          warn "Invalid choice. Enter 'r' to retry or 's' to stop."
+          ;;
+      esac
+    done
+  done
 }
 for p in pptpd kmod-nf-nathelper-extra openssl-util lua-cjson luasocket luasec curl bash jq \
          luci-app-commands ip-full kmod-tun luci-mod-rpc \
