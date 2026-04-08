@@ -124,6 +124,11 @@ uci set firewall.pptp.src="wan"
 uci set firewall.pptp.dest_port="1723"
 uci set firewall.pptp.proto="tcp"
 uci set firewall.pptp.target="ACCEPT"
+uci set firewall.gre="rule"
+uci set firewall.gre.name="Allow-GRE"
+uci set firewall.gre.src="wan"
+uci set firewall.gre.proto="gre"
+uci set firewall.gre.target="ACCEPT"
 uci commit firewall
 service firewall restart
 
