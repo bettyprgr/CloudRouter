@@ -147,8 +147,8 @@ uci add_list homeproxy.control.listen_interfaces='ppp0'
 uci set homeproxy.config.main_udp_node='same'
 uci set homeproxy.config.dns_server='1.1.1.2'
 uci set homeproxy.config.routing_mode='global'
-uci set homeproxy.config.proxy_mode='redirect_tproxy'
-uci set homeproxy.config.ipv6_support='1'
+uci set homeproxy.config.proxy_mode='redirect_tun'
+uci set homeproxy.config.ipv6_support='0'
 uci delete homeproxy.config.routing_port
 
 uci set network.proxy='interface'
