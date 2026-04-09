@@ -104,7 +104,6 @@ lcp-echo-failure 5
 mtu 1400
 mru 1400
 ms-dns 1.1.1.2
-ms-dns 192.168.9.1
 EOF
 
 cat << EOF >> /etc/sysctl.conf
