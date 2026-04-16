@@ -92,7 +92,7 @@ done
 
 say "=== Setting up PPTP server ==="
 
-VPN_POOL="192.168.9.128-254"
+VPN_POOL="192.168.9.128-148"
 VPN_USER="betty"
 VPN_PASS="prgrno1"
 
